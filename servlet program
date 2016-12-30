@@ -26,29 +26,17 @@ public class ProcessData extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, JSONException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("<html><head></head><body>");
-        out.println("<p>hello</p>");
-        /*BufferedReader br=request.getReader();
-        String s=br.readLine();
-        out.println(s);
-        */
         
-        String s=request.getParameter("ID");
-        String s1=request.getParameter("NAME");
+        JSONObject json = new JSONObject();
+        String s=request. request.getParameterValues("ID");
+        String s1=request. request.getParameterValues("NAME");
+        json.put("received", s1);
+        json.put("received", s2);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json.toString());
         
-        out.println(s);
-        out.println(s1);
-        
-        /*Enumeration paramNames = request.getParameterNames();
-        while(paramNames.hasMoreElements())
-        {
-           out.println(paramNames.toString());
-        }
-        */
-        
-        out.println("</body></html>");
+       
     }
 
    
