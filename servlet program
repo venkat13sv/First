@@ -1,0 +1,86 @@
+
+package MyApp;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author praveen
+ */
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
+@WebServlet(name = "ProcessData", urlPatterns = {"/ProcessData"})
+
+public class ProcessData extends HttpServlet {
+    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, JSONException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<html><head></head><body>");
+        out.println("<p>hello</p>");
+        /*BufferedReader br=request.getReader();
+        String s=br.readLine();
+        out.println(s);
+        */
+        
+        String s=request.getParameter("ID");
+        String s1=request.getParameter("NAME");
+        
+        out.println(s);
+        out.println(s1);
+        
+        /*Enumeration paramNames = request.getParameterNames();
+        while(paramNames.hasMoreElements())
+        {
+           out.println(paramNames.toString());
+        }
+        */
+        
+        out.println("</body></html>");
+    }
+
+   
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (JSONException ex) {
+            Logger.getLogger(ProcessData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+   
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (JSONException ex) {
+            Logger.getLogger(ProcessData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
