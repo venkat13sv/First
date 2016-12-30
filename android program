@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     public void func()
     {
         try {
-            url = new URL("http://10.0.2.2/WebApplication1/ProcessData");
+            url = new URL("http://10.0.2.2:8080/WebApplication1/ProcessData");
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // Allow Inputs
             conn.setDoOutput(true);
