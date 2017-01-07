@@ -1,0 +1,162 @@
+package com.example.praveen.myapplication;
+
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class MainActivity extends Activity {
+    Button b;
+    TextView txt;
+    HttpURLConnection conn = null;
+    DataOutputStream dos = null;
+    OutputStream os = null;
+    URL url;
+    TextView txt1;
+    String s;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        b=(Button) findViewById(R.id.button);
+        txt=(TextView) findViewById(R.id.editText);
+        txt1=(TextView)findViewById(R.id.editText2);
+        b.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                new SendClass().execute();
+                txt.setText("Sent");
+            }
+
+        });
+
+    }
+
+    public class SendClass extends AsyncTask<Void,Void,Void>
+    {
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.v("<<server response>>", "doin background");
+
+            func();
+            return null;
+        }
+    }
+
+    protected void onPostExecute(String result) {
+
+        try {
+            JSONObject jsonObj = new JSONObject(s);
+            s=jsonObj.getString("name");
+            Log.v("json","ok");
+
+            Log.v("instance","ok");
+
+           
+            Log.v("alert","ok");
+
+        }
+        catch(final JSONException e){}
+
+
+
+    }
+
+
+    public void func()
+    {
+        try {
+            Log.v("<<server response>>", "func enter" );
+
+            url = new URL("http://10.0.2.2/MyServer/First.php");
+            conn = (HttpURLConnection) url.openConnection();
+            InputStream is = null;
+            conn.setDoInput(true); // Allow Inputs
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+           
+            conn.setReadTimeout(15000 /* milliseconds */);
+            conn.setConnectTimeout(15000 /* milliseconds */);
+            
+
+            JSONObject jsonParam = new JSONObject();
+            String s1="29";
+            String s2="Praveen";
+            jsonParam.put("id", s1.toString());
+            jsonParam.put("name", s2.toString());
+
+            String m=jsonParam.toString();
+            txt1.setText("hello");
+            conn.setFixedLengthStreamingMode(m.getBytes().length);
+            conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+            conn.connect();
+            os = new BufferedOutputStream(conn.getOutputStream());
+            os.write(m.getBytes());
+            
+            Log.v("<<server response>>", "after sending" );
+
+            os.flush();
+
+
+            Log.v("<<server response>>", "before log" );
+            
+
+            try {
+                is = conn.getInputStream();
+                
+                Log.v("<<server response>>", "before statement");
+
+                s=readIt(is ,500);
+                Log.v("<<server response>>", s );
+
+                Toast.makeText(getBaseContext(),s ,
+                        Toast.LENGTH_LONG).show();
+            }
+            finally
+            {
+                conn.disconnect();
+            }
+
+        } catch (Exception e) {
+
+        }
+
+    }
+    public String readIt(InputStream stream, int len) throws IOException
+    {
+        Reader reader = null;
+        reader = new InputStreamReader(stream, "UTF-8");
+        char[] buffer = new char[500];
+        reader.read(buffer);
+        return new String(buffer);
+    }
+
+}
