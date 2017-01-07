@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
         try {
             Log.v("<<server response>>", "func enter" );
 
-            url = new URL("http://10.0.2.2/MyServer/First.php");
+            url = new URL("http://10.0.2.2:80/MyServer/First.php");
             conn = (HttpURLConnection) url.openConnection();
             InputStream is = null;
             conn.setDoInput(true); // Allow Inputs
